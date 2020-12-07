@@ -4,31 +4,34 @@ import sys
 
 TABLE_LENGTH = 100
 barr_mudalator = 1
+
 if TABLE_LENGTH / 100 > 0:
     barr_mudalator = TABLE_LENGTH / 100
 
 with (psycopg2.connect(dbname='db_057', user='db_057', host='sci-didattica.unitn.it', password='pass_057')) as connection:
     cursor = connection.cursor()
+"""1. Fa il drop delle due tabelle dalla base di dati ​ se sono già presenti​"""
     cursor.execute('DROP TABLE IF EXISTS "Boat";')
     connection.commit()
     cursor.execute('DROP TABLE IF EXISTS "Sailor";')
     connection.commit()
 
-
+"""2. Crea le due tabelle come descritto sopra."""
     cursor.execute('CREATE TABLE "Sailor" ("id" INT PRIMARY KEY, "name" CHAR(50) NOT NULL, "address" CHAR(50) NOT NULL, "age" INT NOT NULL, "level" FLOAT NOT NULL);')
     connection.commit()
     cursor.execute('CREATE TABLE "Boat" ("bid" CHAR(25) PRIMARY KEY, "bname" CHAR(50) NOT NULL, "size" CHAR(30) NOT NULL, "captain" INT NOT NULL REFERENCES "Sailor"("id"));')
     connection.commit()
 
 
-
+"""3. Genera 1 milione di tuple (casuali​ 1​ ), in modo tale che ogni tupla abbia un valore diverso per l’attributo level, e
+      le inserisce nella tabella S ​ ailor.​ Assicurarsi inoltre che l’ultima tupla inserita, e solo quella, abbia come valore
+      dell’attributo level, il valore 185."""
     level = random.sample(range(186, 3000000), TABLE_LENGTH-1)
     level.append(185)
     name = ["Liam", "Olivia", "Noah", "Emma", "Oliver", "Ava", "William", "Sophia", "Elijah", "Isabella", "James", "Charlotte", "Benjamin", "Amelia", "Lucas", "Mia", "Mason", "Harper", "Ethan", "Evelyn"]
     name_list = []
     for i in range(0,TABLE_LENGTH,1):
         name_list.append(random.randint(0,19))
-    
 
     andress = "via Giangiorgio Oliviero,15"
     age = 42
@@ -51,6 +54,7 @@ with (psycopg2.connect(dbname='db_057', user='db_057', host='sci-didattica.unitn
 
 
 
+"""4. Genera 1 ulteriore milione di tuple (casuali) e le inserisce nella tabella B ​ oat​ ."""
     bname = ["ABBEY", "ABBIE", "ABBY", "ABEL", "ABIGAIL", "ACE", "ADAM", "ADDIE", "ADMIRAL", "AGGIE", "AIRES", "AJ", "AJAX", "ALDO", "ALEX", "ALEXUS", "ALF", "ALFIE","ALLIE", "ALLY"]
     bname_list = []
     for i in range(0,TABLE_LENGTH,1):
@@ -80,3 +84,28 @@ with (psycopg2.connect(dbname='db_057', user='db_057', host='sci-didattica.unitn
             sys.stdout.flush()
             
     sys.stdout.write("]\n")
+
+"""6. Tutte le tuple con valore di level pari a 185 vengono modificate, cambiando il valore di level a 200 (la vostra
+      query dovrà funzionare anche se la base di dati contiene più di una tupla con valore di level pari a 185). """
+
+
+
+"""7. Seleziona l’id e l’address di tutte le tuple della tabella Sailor che hanno valore di level pari a 200, e li stampa su stderr."""
+
+
+
+"""8. Crea un indice B+tree sull’attributo level."""
+    print("8. Crea un indice B+tree sull’attributo level.")     
+    cursor.execute('CREATE INDEX index_level ON "Sailor" ("level");')
+    connection.commit()
+"""9. Ottiene dal database tutti gli i ​ d ​ del milione di tuple della tabella S ​ ailor​ e li stampa su stderr​ ."""
+
+
+
+"""10. Tutte le tuple con valore di level pari a 200 vengono modificate, cambiando il valore di level a 210 (la vostra
+       query dovrà funzionare anche se la base di dati contiene più di una tupla con valore di level pari a 200)."""
+
+
+
+
+"""11. Seleziona l’id e l’address di tutte le tuple della tabella Sailor che hanno valore di level pari a 210, e li stampa su stderr."""
