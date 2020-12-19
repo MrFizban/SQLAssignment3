@@ -2,7 +2,7 @@ import psycopg2
 import random
 import sys
 from time import time_ns
-TABLE_LENGTH = 10
+TABLE_LENGTH = 1000000
 
 
 def get_random_string(length):
@@ -113,7 +113,7 @@ def assigmant_execute ():
         """)
         lista = cursor.fetchall()
         print(lista, file=sys.stderr)
-        """ per stampare in stderr: print("ciaone", file=sys.stderr)"""
+
         end_time = time_ns() # calcola fine
         print(f"Step 9 needs {end_time - start_time} ns") # calcola fine
 
