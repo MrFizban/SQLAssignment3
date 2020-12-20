@@ -11,7 +11,7 @@ def get_random_string(length):
     return  ''.join(random.choice(letters) for i in range(length))
         
 def assigmant_execute ():
-    with (psycopg2.connect(dbname='db_057', user='db_057', host='sci-didattica.unitn.it', password='cavallo_bello')) as connection:
+    with (psycopg2.connect(dbname='test', user='postgres',host='localhost' ,password='cavallo_bello')) as connection:
         cursor = connection.cursor()
         """1. Fa il drop delle due tabelle dalla base di dati ​ se sono già presenti​"""
         start_time = time_ns() #inizioe conteggio tempo
