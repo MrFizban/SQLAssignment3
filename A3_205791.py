@@ -9,6 +9,23 @@ def get_random_string(length):
     # Random string with the combination of lower and upper case
     letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','x','y','z']
     return  ''.join(random.choice(letters) for i in range(length))
+
+def product(*args, repeat=1):
+    # product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
+    # product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
+    pools = [tuple(pool) for pool in args] * repeat
+    result = [[]]
+    for pool in pools:
+        result = [x+[y] for x in result for y in pool]
+    for prod in result:
+        yield tuple(prod)
+        
+
+def get_random_bid(length=6):
+    letters = ['A','B','C','D','E','F','G','H','I','J','K']
+    lista = [''.join(x) for x in product(letters, repeat=6)]
+    return random.sample(lista,TABLE_LENGTH)
+    
         
 def assigmant_execute ():
     with (psycopg2.connect(dbname='db_057', user='db_057', host='sci-didattica.unitn.it', password='cavallo_bello')) as connection:
@@ -35,7 +52,8 @@ def assigmant_execute ():
         le inserisce nella tabella S  ailor. Assicurarsi inoltre che l’ultima tupla inserita, e solo quella, abbia come valore
         dell’attributo level, il valore 185."""
         start_time = time_ns() #inizioe conteggio tempo
-        id = random.sample(range(186, 3000000), TABLE_LENGTH)
+        #id = random.sample(range(186, 3000000), TABLE_LENGTH)
+        id = range(0,TABLE_LENGTH)
         level = random.sample(range(18600, 3000000), TABLE_LENGTH-1)
         for i in range(0,len(level),1):
             level[i] = level[i]/100  
@@ -53,8 +71,7 @@ def assigmant_execute ():
         
         """4. Genera 1 ulteriore milione di tuple (casuali) e le inserisce nella tabella B  oat ."""
         start_time = time_ns() #inizioe conteggio tempo
-        bid = random.sample(range(186, 3000000), TABLE_LENGTH)
-
+        bid = get_random_bid()
         size = ["large", "medium", "small"]
         size_list = []
         for i in range(0,TABLE_LENGTH,1):
@@ -65,13 +82,12 @@ def assigmant_execute ():
             captain.append(id[random.randint(0,TABLE_LENGTH-1)])
         tabella = []
         for i in range(0,TABLE_LENGTH,1):
-            riga = {"bid":id[i], "bname": get_random_string(12), "size": size_list[i],"captain": captain[i]}
+            riga = {"bid":bid[i], "bname": get_random_string(12), "size": size_list[i],"captain": captain[i]}
             tabella.append(riga)
         end_time = time_ns() # calcola fine
         print(f"Step 4 needs {end_time - start_time} ns") # calcola fine
 
 
-        """bid bname size captain"""
         temp = f'''INSERT INTO "Boat" ("bid", "bname", "size", "captain") VALUES (%(bid)s, %(bname)s,%(size)s, %(captain)s)'''
         cursor.executemany(temp, tabella)
         connection.commit()
@@ -83,7 +99,8 @@ def assigmant_execute ():
         start_time = time_ns() #inizioe conteggio tempo
         cursor.execute(""" SELECT id FROM "Sailor" """)
         lista = cursor.fetchall()
-        print(lista, file=sys.stderr)
+        for i in lista:
+            print(i[0],file=sys.stderr)
         end_time = time_ns() # calcola fine
         print(f"Step 6 needs {end_time - start_time} ns") # calcola fine
 
@@ -100,7 +117,8 @@ def assigmant_execute ():
         start_time = time_ns() #inizioe conteggio tempo
         cursor.execute('''SELECT id, address FROM "Sailor" as sl WHERE "level" = 200''')
         lista = cursor.fetchall()
-        print(lista, file=sys.stderr)
+        for i in lista:
+            print(f"{i[0]},{i[1]}",file=sys.stderr)
         end_time = time_ns() # calcola fine
         print(f"Step 8 needs {end_time - start_time} ns") # calcola fine
 
@@ -114,7 +132,8 @@ def assigmant_execute ():
                 FROM "Sailor"
         """)
         lista = cursor.fetchall()
-        print(lista, file=sys.stderr)
+        for i in lista:
+            print(i[0],file=sys.stderr)
 
         end_time = time_ns() # calcola fine
         print(f"Step 9 needs {end_time - start_time} ns") # calcola fine
@@ -132,7 +151,8 @@ def assigmant_execute ():
         start_time = time_ns() #inizioe conteggio tempo
         cursor.execute('''SELECT id, address FROM "Sailor" as sl WHERE "level" = 210''')
         lista = cursor.fetchall()
-        print(lista, file=sys.stderr)
+        for i in lista:
+            print(f"{i[0]},{i[1]}",file=sys.stderr)
 
         end_time = time_ns() # calcola fine
         print(f"Step 11 needs {end_time - start_time} ns") # calcola fine
