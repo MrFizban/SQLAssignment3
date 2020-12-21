@@ -4,7 +4,6 @@ import sys
 from time import time_ns
 TABLE_LENGTH = 1000000
 
-
 def get_random_string(length):
     # Random string with the combination of lower and upper case
     letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','x','y','z']
@@ -125,7 +124,7 @@ def assigmant_execute ():
         start_time = time_ns() #inizioe conteggio tempo
         cursor.execute('CREATE INDEX index_level ON "Sailor" USING btree ("level");')
         connection.commit()
-        
+
         """9. Ottiene dal database tutti gli id ​ del milione di tuple della tabella Sailor​ e li stampa su stderr​ ."""
         cursor.execute("""
                 SELECT id
