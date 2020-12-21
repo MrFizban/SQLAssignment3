@@ -53,7 +53,7 @@ def assigmant_execute ():
         le inserisce nella tabella S  ailor. Assicurarsi inoltre che l’ultima tupla inserita, e solo quella, abbia come valore
         dell’attributo level, il valore 185."""
         start_time = time_ns() #inizioe conteggio tempo
-        id = range(186, 3000000)
+        id = range(0, TABLE_LENGTH)
         level = random.sample(range(18600, 3000000), TABLE_LENGTH-1)
         for i in range(0,len(level),1):
             level[i] = level[i]/100  

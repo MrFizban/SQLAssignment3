@@ -37,7 +37,7 @@ def assigmant_execute ():
         cursor.execute('DROP TABLE IF EXISTS "Sailor";')
         connection.commit()
         end_time = time_ns() # calcola fine
-        print(f"Step 1 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 1 needs {end_time - start_time} ns") # stampa tempo
 
         """2. Crea le due tabelle come descritto sopra."""
         start_time = time_ns() #inizioe conteggio tempo
@@ -46,13 +46,12 @@ def assigmant_execute ():
         cursor.execute('CREATE TABLE "Boat" ("bid" CHAR(25) PRIMARY KEY, "bname" CHAR(50) NOT NULL, "size" CHAR(30) NOT NULL, "captain" INT NOT NULL REFERENCES "Sailor"("id"));')
         connection.commit()
         end_time = time_ns() # calcola fine
-        print(f"Step 2 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 2 needs {end_time - start_time} ns") # stampa tempo
 
         """3. Genera 1 milione di tuple (casuali 1), in modo tale che ogni tupla abbia un valore diverso per l’attributo level, e
         le inserisce nella tabella S  ailor. Assicurarsi inoltre che l’ultima tupla inserita, e solo quella, abbia come valore
         dell’attributo level, il valore 185."""
         start_time = time_ns() #inizioe conteggio tempo
-        #id = random.sample(range(186, 3000000), TABLE_LENGTH)
         id = range(0,TABLE_LENGTH)
         level = random.sample(range(18600, 3000000), TABLE_LENGTH-1)
         for i in range(0,len(level),1):
@@ -63,11 +62,11 @@ def assigmant_execute ():
             riga = {"id":id[i], "name": get_random_string(12), "address": get_random_string(42),"age": random.randint(0,60),"level": level[i]}
             tabella.append(riga)
 
-        temp = f'''INSERT INTO "Sailor" ("id", "name", "address", "age", "level") VALUES (%(id)s, %(name)s,%(address)s, %(age)s, %(level)s )'''
-        cursor.executemany(temp,tabella)
+        query = f'''INSERT INTO "Sailor" ("id", "name", "address", "age", "level") VALUES (%(id)s, %(name)s,%(address)s, %(age)s, %(level)s )'''
+        cursor.executemany(query,tabella)
         connection.commit()
         end_time = time_ns() # calcola fine
-        print(f"Step 3 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 3 needs {end_time - start_time} ns") # stampa tempo
         
         """4. Genera 1 ulteriore milione di tuple (casuali) e le inserisce nella tabella B  oat ."""
         start_time = time_ns() #inizioe conteggio tempo
@@ -85,14 +84,14 @@ def assigmant_execute ():
             riga = {"bid":bid[i], "bname": get_random_string(12), "size": size_list[i],"captain": captain[i]}
             tabella.append(riga)
         end_time = time_ns() # calcola fine
-        print(f"Step 4 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 4 needs {end_time - start_time} ns") # stampa tempo
 
 
-        temp = f'''INSERT INTO "Boat" ("bid", "bname", "size", "captain") VALUES (%(bid)s, %(bname)s,%(size)s, %(captain)s)'''
-        cursor.executemany(temp, tabella)
+        query = f'''INSERT INTO "Boat" ("bid", "bname", "size", "captain") VALUES (%(bid)s, %(bname)s,%(size)s, %(captain)s)'''
+        cursor.executemany(query, tabella)
         connection.commit()
         end_time = time_ns() # calcola fine
-        print(f"Step 5 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 5 needs {end_time - start_time} ns") # stampa tempo
 
 
         """5. Ottiene dal database tutti gli id  del milione di tuple della tabella Sailor e li stampa su stderr ."""
@@ -102,7 +101,7 @@ def assigmant_execute ():
         for i in lista:
             print(i[0],file=sys.stderr)
         end_time = time_ns() # calcola fine
-        print(f"Step 6 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 6 needs {end_time - start_time} ns") # stampa tempo
 
 
         """6. Tutte le tuple con valore di level pari a 185 vengono modificate, cambiando il valore di level a 200 (la vostra
@@ -111,7 +110,7 @@ def assigmant_execute ():
         cursor.execute('''UPDATE "Sailor" SET "level" = 200 WHERE "level" = 185''')
         connection.commit()
         end_time = time_ns() # calcola fine
-        print(f"Step 7 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 7 needs {end_time - start_time} ns") # stampa tempo
 
         """7. Seleziona l’id e l’address di tutte le tuple della tabella Sailor che hanno valore di level pari a 200, e li stampa su stderr."""
         start_time = time_ns() #inizioe conteggio tempo
@@ -120,12 +119,13 @@ def assigmant_execute ():
         for i in lista:
             print(f"{i[0]},{i[1]}",file=sys.stderr)
         end_time = time_ns() # calcola fine
-        print(f"Step 8 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 8 needs {end_time - start_time} ns") # stampa tempo
 
         """8. Crea un indice B+tree sull’attributo level."""
         start_time = time_ns() #inizioe conteggio tempo
         cursor.execute('CREATE INDEX index_level ON "Sailor" USING btree ("level");')
         connection.commit()
+        
         """9. Ottiene dal database tutti gli id ​ del milione di tuple della tabella Sailor​ e li stampa su stderr​ ."""
         cursor.execute("""
                 SELECT id
@@ -136,7 +136,7 @@ def assigmant_execute ():
             print(i[0],file=sys.stderr)
 
         end_time = time_ns() # calcola fine
-        print(f"Step 9 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 9 needs {end_time - start_time} ns") # stampa tempo
 
         """10. Tutte le tuple con valore di level pari a 200 vengono modificate, cambiando il valore di level a 210 (la vostra
         query dovrà funzionare anche se la base di dati contiene più di una tupla con valore di level pari a 200)."""
@@ -145,7 +145,7 @@ def assigmant_execute ():
         connection.commit()
 
         end_time = time_ns() # calcola fine
-        print(f"Step 10 needs {end_time - start_time} ns") # calcola fine
+        print(f"Step 10 needs {end_time - start_time} ns") # stampa tempo
 
         """11. Seleziona l’id e l’address di tutte le tuple della tabella Sailor che hanno valore di level pari a 210, e li stampa su stderr."""
         start_time = time_ns() #inizioe conteggio tempo
@@ -155,8 +155,7 @@ def assigmant_execute ():
             print(f"{i[0]},{i[1]}",file=sys.stderr)
 
         end_time = time_ns() # calcola fine
-        print(f"Step 11 needs {end_time - start_time} ns") # calcola fine
-
+        print(f"Step 11 needs {end_time - start_time} ns") # stampa tempo
 
 if __name__ == "__main__":
     assigmant_execute()
